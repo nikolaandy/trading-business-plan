@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vườn Địa Đàng — Trading Business Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0B0E11;--bg2:#111518;--bg3:#181D22;--bg4:#1F252B;
+  --surface:#232A32;--surface2:#2A323B;
+  --gold:#C9A84C;--gold-l:#E8CC6E;--gold-d:#A68932;
+  --green:#34D399;--green-d:#059669;--green-bg:rgba(52,211,153,0.08);
+  --red:#F87171;--red-d:#DC2626;--red-bg:rgba(248,113,113,0.08);
+  --blue:#60A5FA;--blue-bg:rgba(96,165,250,0.08);
+  --amber:#FBBF24;--amber-bg:rgba(251,191,36,0.08);
+  --text:#E8E6E1;--text2:#9CA3AF;--text3:#6B7280;
+  --border:#2A323B;--border2:#374151;
+  --radius:12px;--radius-sm:8px;--radius-lg:16px;
+}
+html{font-size:15px;scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+/* LAYOUT */
+.app{display:flex;min-height:100vh}
+.sidebar{
+  width:260px;min-height:100vh;background:var(--bg2);
+  border-right:1px solid var(--border);
+  position:fixed;left:0;top:0;bottom:0;
+  display:flex;flex-direction:column;z-index:50;
+  transition:transform 0.3s ease;
+}
+.sidebar-header{padding:1.5rem;border-bottom:1px solid var(--border)}
+.brand{display:flex;align-items:center;gap:0.75rem}
+.brand-icon{
+  width:36px;height:36px;border-radius:10px;
+  background:linear-gradient(135deg,var(--gold-d),var(--gold-l));
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;
+}
+.brand-name{font-family:'Fraunces',serif;font-size:1.05rem;font-weight:700;color:var(--gold-l);letter-spacing:0.02em}
+.brand-sub{font-size:0.7rem;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;margin-top:1px}
+
+.sidebar-nav{flex:1;padding:1rem 0.75rem;display:flex;flex-direction:column;gap:2px}
+.nav-section{font-size:0.65rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.12em;padding:1rem 0.75rem 0.4rem;font-weight:600}
+.nav-item{
+  display:flex;align-items:center;gap:0.7rem;
+  padding:0.6rem 0.75rem;border-radius:var(--radius-sm);
+  color:var(--text2);font-size:0.87rem;font-weight:500;
+  cursor:pointer;transition:all 0.2s ease;position:relative;
+}
+.nav-item:hover{background:var(--bg3);color:var(--text)}
+.nav-item.active{background:rgba(201,168,76,0.1);color:var(--gold-l)}
+.nav-item.active::before{
+  content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);
+  width:3px;height:60%;background:var(--gold);border-radius:0 3px 3px 0;
+}
+.nav-icon{width:18px;text-align:center;font-size:0.95rem;flex-shrink:0}
+
+.sidebar-footer{padding:1rem 1.25rem;border-top:1px solid var(--border)}
+.user-badge{
+  display:flex;align-items:center;gap:0.6rem;
+  padding:0.5rem;border-radius:var(--radius-sm);
+  background:var(--bg3);
+}
+.user-avatar{
+  width:32px;height:32px;border-radius:8px;
+  background:linear-gradient(135deg,var(--green-d),var(--green));
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.75rem;font-weight:700;color:#fff;
+}
+.user-name{font-size:0.8rem;font-weight:600;color:var(--text)}
+.user-role{font-size:0.65rem;color:var(--text3)}
+
+.main{margin-left:260px;flex:1;min-height:100vh}
+
+/* TOPBAR */
+.topbar{
+  position:sticky;top:0;z-index:40;
+  background:rgba(11,14,17,0.85);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  padding:0.8rem 2rem;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.topbar-title{font-family:'Fraunces',serif;font-size:1.25rem;font-weight:700}
+.topbar-actions{display:flex;align-items:center;gap:0.75rem}
+.btn-reset{
+  padding:0.45rem 1rem;border-radius:var(--radius-sm);
+  background:var(--surface);border:1px solid var(--border);
+  color:var(--text2);font-size:0.78rem;font-weight:500;
+  cursor:pointer;transition:all 0.2s;font-family:inherit;
+}
+.btn-reset:hover{border-color:var(--red);color:var(--red)}
+.btn-export{
+  padding:0.45rem 1rem;border-radius:var(--radius-sm);
+  background:linear-gradient(135deg,var(--gold-d),var(--gold));
+  border:none;color:#0B0E11;font-size:0.78rem;font-weight:600;
+  cursor:pointer;transition:all 0.2s;font-family:inherit;
+}
+.btn-export:hover{box-shadow:0 4px 15px rgba(201,168,76,0.3)}
+
+/* CONTENT */
+.content{padding:1.5rem 2rem 3rem}
+
+/* PAGE SECTIONS */
+.page{display:none}
+.page.active{display:block}
+
+/* CARDS */
+.card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:1.5rem;
+  margin-bottom:1.25rem;position:relative;overflow:hidden;
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(201,168,76,0.2),transparent);
+}
+.card-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.2rem}
+.card-title{font-family:'Fraunces',serif;font-size:1.05rem;font-weight:700;color:var(--text)}
+.card-subtitle{font-size:0.78rem;color:var(--text3);margin-top:0.2rem}
+.card-badge{
+  padding:0.2rem 0.6rem;border-radius:20px;
+  font-size:0.65rem;font-weight:600;letter-spacing:0.05em;
+  text-transform:uppercase;
+}
+.badge-green{background:var(--green-bg);color:var(--green)}
+.badge-red{background:var(--red-bg);color:var(--red)}
+.badge-blue{background:var(--blue-bg);color:var(--blue)}
+.badge-amber{background:var(--amber-bg);color:var(--amber)}
+
+/* GRID */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+
+/* STAT CARDS */
+.stat{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--radius);padding:1.2rem;
+  position:relative;overflow:hidden;
+}
+.stat-label{font-size:0.72rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;font-weight:600}
+.stat-value{font-family:'Fraunces',serif;font-size:1.7rem;font-weight:700;margin-top:0.3rem;line-height:1.1}
+.stat-sub{font-size:0.75rem;color:var(--text3);margin-top:0.3rem;display:flex;align-items:center;gap:0.3rem}
+.stat-icon{
+  position:absolute;top:1rem;right:1rem;width:36px;height:36px;
+  border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;
+}
+.stat.green .stat-value{color:var(--green)}
+.stat.green .stat-icon{background:var(--green-bg)}
+.stat.red .stat-value{color:var(--red)}
+.stat.red .stat-icon{background:var(--red-bg)}
+.stat.gold .stat-value{color:var(--gold-l)}
+.stat.gold .stat-icon{background:rgba(201,168,76,0.1)}
+.stat.blue .stat-value{color:var(--blue)}
+.stat.blue .stat-icon{background:var(--blue-bg)}
+
+/* FORM */
+.form-group{margin-bottom:1.1rem}
+.form-label{
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:0.78rem;font-weight:600;color:var(--text2);
+  margin-bottom:0.4rem;
+}
+.form-hint{font-size:0.68rem;color:var(--text3);font-weight:400;font-style:italic}
+.form-input{
+  width:100%;padding:0.6rem 0.8rem;
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:var(--radius-sm);color:var(--text);
+  font-family:inherit;font-size:0.88rem;
+  transition:all 0.2s;outline:none;
+}
+.form-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,0.1)}
+.form-input::placeholder{color:var(--text3)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-unit{
+  position:relative;
+}
+.form-unit .form-input{padding-right:2.5rem}
+.form-unit::after{
+  content:attr(data-unit);position:absolute;right:0.8rem;top:50%;transform:translateY(-50%);
+  font-size:0.75rem;color:var(--text3);pointer-events:none;margin-top:0.9rem;
+}
+.form-select{
+  width:100%;padding:0.6rem 0.8rem;
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:var(--radius-sm);color:var(--text);
+  font-family:inherit;font-size:0.88rem;
+  transition:all 0.2s;outline:none;cursor:pointer;
+  appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%236B7280' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 0.8rem center;
+}
+.form-select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,0.1)}
+
+/* EDUCATION TIPS */
+.edu-tip{
+  background:rgba(201,168,76,0.05);border:1px solid rgba(201,168,76,0.15);
+  border-radius:var(--radius);padding:1rem 1.2rem;
+  margin-bottom:1.2rem;display:flex;gap:0.8rem;align-items:flex-start;
+}
+.edu-icon{font-size:1.2rem;flex-shrink:0;margin-top:0.1rem}
+.edu-text{font-size:0.82rem;color:var(--text2);line-height:1.65}
+.edu-text strong{color:var(--gold-l);font-weight:600}
+
+/* PROGRESS BAR */
+.progress-bar{
+  width:100%;height:6px;background:var(--bg3);
+  border-radius:3px;overflow:hidden;margin-top:0.5rem;
+}
+.progress-fill{height:100%;border-radius:3px;transition:width 0.6s ease}
+
+/* TABLES */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{
+  text-align:left;padding:0.6rem 0.8rem;
+  font-size:0.7rem;color:var(--text3);text-transform:uppercase;
+  letter-spacing:0.08em;font-weight:600;
+  border-bottom:1px solid var(--border);
+}
+td{
+  padding:0.7rem 0.8rem;font-size:0.85rem;
+  border-bottom:1px solid rgba(42,50,59,0.5);
+  color:var(--text2);
+}
+tr:hover td{background:rgba(255,255,255,0.02)}
+
+/* SCENARIO SLIDER */
+.scenario-slider{margin:1rem 0}
+.slider-track{position:relative;padding:0.5rem 0}
+input[type="range"]{
+  width:100%;height:4px;border-radius:2px;
+  background:var(--bg3);outline:none;
+  -webkit-appearance:none;cursor:pointer;
+}
+input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:18px;height:18px;
+  border-radius:50%;background:var(--gold);
+  border:3px solid var(--bg);cursor:pointer;
+  box-shadow:0 0 0 3px rgba(201,168,76,0.2);
+}
+.slider-labels{display:flex;justify-content:space-between;font-size:0.7rem;color:var(--text3);margin-top:0.3rem}
+
+/* CHART CONTAINER */
+.chart-container{position:relative;height:250px;margin-top:1rem}
+
+/* SCENARIO CARDS */
+.scenario-result{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:0.8rem;margin-top:1rem;
+}
+.scenario-box{
+  padding:1rem;border-radius:var(--radius);text-align:center;
+}
+.scenario-box.best{background:var(--green-bg);border:1px solid rgba(52,211,153,0.2)}
+.scenario-box.normal{background:var(--blue-bg);border:1px solid rgba(96,165,250,0.2)}
+.scenario-box.worst{background:var(--red-bg);border:1px solid rgba(248,113,113,0.2)}
+.scenario-label{font-size:0.68rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;font-weight:600}
+.scenario-val{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:700;margin-top:0.3rem}
+.scenario-box.best .scenario-val{color:var(--green)}
+.scenario-box.normal .scenario-val{color:var(--blue)}
+.scenario-box.worst .scenario-val{color:var(--red)}
+.scenario-detail{font-size:0.72rem;color:var(--text3);margin-top:0.2rem}
+
+/* RISK GAUGE */
+.gauge-wrap{display:flex;align-items:center;justify-content:center;padding:1rem 0}
+.gauge{position:relative;width:200px;height:110px;overflow:hidden}
+.gauge-bg{
+  width:200px;height:200px;border-radius:50%;
+  border:14px solid var(--bg3);
+  border-bottom-color:transparent;border-left-color:transparent;
+  transform:rotate(225deg);
+  position:absolute;top:0;
+}
+.gauge-fill{
+  width:200px;height:200px;border-radius:50%;
+  border:14px solid transparent;
+  border-top-color:var(--green);border-right-color:var(--green);
+  transform:rotate(225deg);
+  position:absolute;top:0;
+  transition:all 0.8s ease;
+}
+.gauge-label{
+  position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  text-align:center;
+}
+.gauge-value{font-family:'Fraunces',serif;font-size:1.8rem;font-weight:900}
+.gauge-text{font-size:0.72rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em}
+
+/* TABS */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:1.2rem}
+.tab{
+  padding:0.6rem 1.2rem;font-size:0.82rem;font-weight:500;
+  color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;
+  transition:all 0.2s;
+}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--gold-l);border-bottom-color:var(--gold)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* MOBILE */
+.menu-toggle{display:none;background:none;border:none;color:var(--text);font-size:1.3rem;cursor:pointer;padding:0.3rem}
+@media(max-width:900px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .topbar{padding:0.8rem 1.2rem}
+  .content{padding:1.2rem}
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+  .scenario-result{grid-template-columns:1fr}
+  .menu-toggle{display:block}
+}
+
+/* ANIMATION */
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.animate-in{animation:fadeIn 0.5s ease forwards;opacity:0}
+
+/* SPECIAL: EDEN SCORE */
+.eden-score{
+  text-align:center;padding:2rem;
+  background:linear-gradient(135deg,rgba(201,168,76,0.05),rgba(52,211,153,0.05));
+  border-radius:var(--radius-lg);border:1px solid rgba(201,168,76,0.15);
+  margin-bottom:1.5rem;
+}
+.eden-score-value{
+  font-family:'Fraunces',serif;font-size:4rem;font-weight:900;
+  background:linear-gradient(135deg,var(--gold),var(--green));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  line-height:1;
+}
+.eden-score-label{font-size:0.78rem;color:var(--text3);margin-top:0.3rem;letter-spacing:0.1em;text-transform:uppercase}
+.eden-score-desc{font-size:0.88rem;color:var(--text2);margin-top:0.8rem;max-width:400px;margin-left:auto;margin-right:auto;line-height:1.6;font-style:italic}
+
+/* CHECKLIST */
+.checklist{list-style:none;display:flex;flex-direction:column;gap:0.5rem}
+.checklist li{
+  display:flex;align-items:center;gap:0.7rem;
+  padding:0.6rem 0.8rem;border-radius:var(--radius-sm);
+  font-size:0.85rem;color:var(--text2);
+  background:var(--bg3);cursor:pointer;transition:all 0.2s;
+}
+.checklist li:hover{background:var(--surface)}
+.check-box{
+  width:20px;height:20px;border-radius:6px;
+  border:2px solid var(--border2);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.7rem;transition:all 0.2s;
+}
+.checklist li.checked .check-box{background:var(--green);border-color:var(--green);color:#fff}
+.checklist li.checked{color:var(--text3);text-decoration:line-through}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="brand">
+        <div class="brand-icon">🌳</div>
+        <div>
+          <div class="brand-name">Vườn Địa Đàng</div>
+          <div class="brand-sub">Trading Business Plan</div>
+        </div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">Kế Hoạch</div>
+      <div class="nav-item active" data-page="dashboard" onclick="switchPage('dashboard',this)">
+        <span class="nav-icon">📊</span> Dashboard Tổng Quan
+      </div>
+      <div class="nav-item" data-page="profile" onclick="switchPage('profile',this)">
+        <span class="nav-icon">👤</span> Hồ Sơ Trader
+      </div>
+      <div class="nav-item" data-page="strategy" onclick="switchPage('strategy',this)">
+        <span class="nav-icon">🎯</span> Chiến Lược & Mục Tiêu
+      </div>
+      <div class="nav-section">Phân Tích</div>
+      <div class="nav-item" data-page="risk" onclick="switchPage('risk',this)">
+        <span class="nav-icon">⚖️</span> Quản Trị Rủi Ro
+      </div>
+      <div class="nav-item" data-page="scenario" onclick="switchPage('scenario',this)">
+        <span class="nav-icon">🔮</span> Chạy Thử Kịch Bản
+      </div>
+      <div class="nav-item" data-page="projection" onclick="switchPage('projection',this)">
+        <span class="nav-icon">📈</span> Dự Phóng Lợi Nhuận
+      </div>
+      <div class="nav-section">Đánh Giá</div>
+      <div class="nav-item" data-page="checklist" onclick="switchPage('checklist',this)">
+        <span class="nav-icon">✅</span> Checklist Sẵn Sàng
+      </div>
+      <div class="nav-item" data-page="score" onclick="switchPage('score',this)">
+        <span class="nav-icon">🌟</span> Eden Score
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-badge">
+        <div class="user-avatar">T</div>
+        <div><div class="user-name">Trader</div><div class="user-role">Vườn Địa Đàng Member</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:0.8rem">
+        <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+        <h1 class="topbar-title" id="pageTitle">Dashboard Tổng Quan</h1>
+      </div>
+      <div class="topbar-actions">
+        <button class="btn-reset" onclick="resetAll()">↺ Reset</button>
+        <button class="btn-export" onclick="exportPlan()">⤓ Xuất PDF</button>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <!-- ==================== DASHBOARD ==================== -->
+      <div class="page active" id="page-dashboard">
+        <div class="edu-tip animate-in">
+          <span class="edu-icon">🌳</span>
+          <div class="edu-text">
+            <strong>Chào mừng đến Vườn Địa Đàng!</strong> Trading là một doanh nghiệp — và mọi doanh nghiệp cần kế hoạch. Hãy điền đầy đủ các thông số để nhận bản phân tích chi tiết về hành trình trading của bạn.
+          </div>
+        </div>
+
+        <div class="grid-4 animate-in" style="animation-delay:0.1s">
+          <div class="stat gold">
+            <div class="stat-label">Vốn Hiện Tại</div>
+            <div class="stat-value" id="d-capital">$0</div>
+            <div class="stat-sub">Số vốn bắt đầu</div>
+            <div class="stat-icon">💰</div>
+          </div>
+          <div class="stat green">
+            <div class="stat-label">Expectancy / Lệnh</div>
+            <div class="stat-value" id="d-expectancy">$0</div>
+            <div class="stat-sub" id="d-expectancy-sub">Kỳ vọng lợi nhuận</div>
+            <div class="stat-icon">📈</div>
+          </div>
+          <div class="stat blue">
+            <div class="stat-label">Win Rate</div>
+            <div class="stat-value" id="d-winrate">0%</div>
+            <div class="stat-sub">Tỉ lệ thắng</div>
+            <div class="stat-icon">🎯</div>
+          </div>
+          <div class="stat" id="d-risk-stat">
+            <div class="stat-label">Rủi Ro / Lệnh</div>
+            <div class="stat-value" id="d-riskper">0%</div>
+            <div class="stat-sub" id="d-riskper-sub">Mức rủi ro</div>
+            <div class="stat-icon">⚖️</div>
+          </div>
+        </div>
+
+        <div class="grid-2 animate-in" style="animation-delay:0.2s">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Dự Phóng 12 Tháng</div>
+                <div class="card-subtitle">Biểu đồ tăng trưởng vốn</div>
+              </div>
+              <span class="card-badge badge-green" id="d-growth-badge">—</span>
+            </div>
+            <div class="chart-container"><canvas id="chartGrowth"></canvas></div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Phân Bổ Kết Quả</div>
+                <div class="card-subtitle">Monte Carlo 1000 simulations</div>
+              </div>
+              <span class="card-badge badge-blue">SIM</span>
+            </div>
+            <div class="chart-container"><canvas id="chartMonte"></canvas></div>
+          </div>
+        </div>
+
+        <div class="card animate-in" style="animation-delay:0.3s">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Bảng Thống Kê Nhanh</div>
+              <div class="card-subtitle">Tất cả chỉ số quan trọng trong kế hoạch</div>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr>
+                <th>Chỉ Số</th><th>Giá Trị</th><th>Đánh Giá</th><th>Ghi Chú</th>
+              </tr></thead>
+              <tbody id="statsTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== PROFILE ==================== -->
+      <div class="page" id="page-profile">
+        <div class="edu-tip">
+          <span class="edu-icon">💡</span>
+          <div class="edu-text">
+            <strong>Bước đầu tiên:</strong> Hiểu rõ vị trí hiện tại của bạn. Vốn là hạt giống — hãy trung thực về số vốn bạn có thể <strong>chấp nhận mất hoàn toàn</strong> mà không ảnh hưởng đến cuộc sống. Đây không phải tiền sinh hoạt, tiền khẩn cấp hay tiền vay mượn.
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><div><div class="card-title">Thông Tin Tài Chính</div></div></div>
+            <div class="form-group">
+              <label class="form-label">Vốn Trading Hiện Tại <span class="form-hint">USD</span></label>
+              <input class="form-input" type="number" id="f-capital" placeholder="10000" oninput="recalc()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Thu Nhập Hàng Tháng Khác <span class="form-hint">Ngoài trading</span></label>
+              <input class="form-input" type="number" id="f-income" placeholder="2000" oninput="recalc()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Chi Phí Sinh Hoạt / Tháng</label>
+              <input class="form-input" type="number" id="f-expense" placeholder="1500" oninput="recalc()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Quỹ Khẩn Cấp (Tháng Chi Phí) <span class="form-hint">Nên ≥ 6 tháng</span></label>
+              <input class="form-input" type="number" id="f-emergency" placeholder="6" oninput="recalc()">
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div><div class="card-title">Kinh Nghiệm Trading</div></div></div>
+            <div class="form-group">
+              <label class="form-label">Số Năm Kinh Nghiệm</label>
+              <select class="form-select" id="f-experience" onchange="recalc()">
+                <option value="0">Mới bắt đầu (< 1 năm)</option>
+                <option value="1">1-2 năm</option>
+                <option value="2">2-5 năm</option>
+                <option value="3">5+ năm</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phong Cách Trading</label>
+              <select class="form-select" id="f-style" onchange="recalc()">
+                <option value="scalp">Scalping (1-15 phút)</option>
+                <option value="day">Day Trading (trong ngày)</option>
+                <option value="swing" selected>Swing Trading (vài ngày)</option>
+                <option value="position">Position Trading (vài tuần-tháng)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Thị Trường Giao Dịch</label>
+              <select class="form-select" id="f-market" onchange="recalc()">
+                <option value="forex">Forex</option>
+                <option value="crypto">Crypto</option>
+                <option value="stock">Cổ Phiếu</option>
+                <option value="futures">Futures</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Thời Gian Dành Cho Trading / Ngày</label>
+              <select class="form-select" id="f-hours" onchange="recalc()">
+                <option value="1">1-2 giờ</option>
+                <option value="3">3-5 giờ</option>
+                <option value="6">6-8 giờ (bán thời gian)</option>
+                <option value="8">8+ giờ (toàn thời gian)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="edu-tip">
+          <span class="edu-icon">🌳</span>
+          <div class="edu-text">
+            <strong>Lời khuyên từ Vườn Địa Đàng:</strong> Trader tỉnh thức không bao giờ trading bằng tiền mà họ không thể mất. Nếu vốn trading chiếm hơn 20% tổng tài sản — hãy cân nhắc giảm xuống. Sự bình an trong tâm trí là nền tảng cho mọi quyết định giao dịch đúng đắn.
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== STRATEGY ==================== -->
+      <div class="page" id="page-strategy">
+        <div class="edu-tip">
+          <span class="edu-icon">🎯</span>
+          <div class="edu-text">
+            <strong>Win Rate & Risk:Reward</strong> là hai yếu tố quyết định lợi nhuận dài hạn. Một hệ thống thắng 40% nhưng R:R = 1:3 vẫn có lời. Ngược lại, win rate 70% với R:R 1:0.5 sẽ lỗ. Hãy nhập <strong>số liệu thực</strong> từ nhật ký giao dịch, không phải kỳ vọng.
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><div><div class="card-title">Thông Số Hệ Thống</div></div></div>
+            <div class="form-group">
+              <label class="form-label">Win Rate (%) <span class="form-hint">Từ backtest hoặc nhật ký</span></label>
+              <input class="form-input" type="number" id="f-winrate" placeholder="55" min="1" max="99" oninput="recalc()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Risk : Reward Ratio <span class="form-hint">VD: 2 = 1:2</span></label>
+              <input class="form-input" type="number" id="f-rr" placeholder="2" step="0.1" min="0.1" oninput="recalc()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Số Lệnh Trung Bình / Tháng</label>
+              <input class="form-input" type="number" id="f-trades" placeholder="20" oninput="recalc()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Rủi Ro Mỗi Lệnh (% Vốn) <span class="form-hint">Khuyến nghị 1-2%</span></label>
+              <input class="form-input" type="number" id="f-riskpct" placeholder="1" step="0.1" min="0.1" max="10" oninput="recalc()">
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div><div class="card-title">Mục Tiêu Tài Chính</div></div></div>
+            <div class="form-group">
+              <label class="form-label">Mục Tiêu Lợi Nhuận / Tháng (%) <span class="form-hint">Thực tế: 3-10%</span></label>
+              <input class="form-input" type="number" id="f-target" placeholder="5" oninput="recalc()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Mức Drawdown Tối Đa Chấp Nhận (%)</label>
+              <input class="form-input" type="number" id="f-maxdd" placeholder="15" oninput="recalc()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Mục Tiêu Vốn Sau 12 Tháng</label>
+              <input class="form-input" type="number" id="f-goal12" placeholder="20000" oninput="recalc()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Có Rút Lợi Nhuận Hàng Tháng?</label>
+              <select class="form-select" id="f-withdraw" onchange="recalc()">
+                <option value="0">Không — tái đầu tư 100%</option>
+                <option value="25">Rút 25% lợi nhuận</option>
+                <option value="50">Rút 50% lợi nhuận</option>
+                <option value="75">Rút 75% lợi nhuận</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="edu-tip">
+          <span class="edu-icon">⚠️</span>
+          <div class="edu-text">
+            <strong>Cảnh báo:</strong> Nếu rủi ro mỗi lệnh > 3% vốn, bạn đang đánh bạc chứ không phải trading. Với 5% rủi ro/lệnh, chỉ cần thua 10 lệnh liên tiếp (xác suất xảy ra cao hơn bạn nghĩ) là mất 40% vốn. Trader chuyên nghiệp thường chỉ rủi ro 0.5-2%.
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== RISK ==================== -->
+      <div class="page" id="page-risk">
+        <div class="edu-tip">
+          <span class="edu-icon">⚖️</span>
+          <div class="edu-text">
+            <strong>Ruin Probability</strong> (xác suất phá sản) là con số quan trọng nhất mà hầu hết trader bỏ qua. Nếu con số này > 5%, bạn CẦN điều chỉnh kế hoạch ngay lập tức — giảm rủi ro/lệnh hoặc cải thiện hệ thống.
+          </div>
+        </div>
+
+        <div class="grid-3">
+          <div class="stat red" id="ruin-stat">
+            <div class="stat-label">Xác Suất Phá Sản</div>
+            <div class="stat-value" id="r-ruin">—</div>
+            <div class="stat-sub">Risk of Ruin</div>
+            <div class="stat-icon">💀</div>
+          </div>
+          <div class="stat gold">
+            <div class="stat-label">Max Drawdown Kỳ Vọng</div>
+            <div class="stat-value" id="r-maxdd">—</div>
+            <div class="stat-sub">Dựa trên Monte Carlo</div>
+            <div class="stat-icon">📉</div>
+          </div>
+          <div class="stat green">
+            <div class="stat-label">Kelly Criterion</div>
+            <div class="stat-value" id="r-kelly">—</div>
+            <div class="stat-sub">% vốn tối ưu / lệnh</div>
+            <div class="stat-icon">🔬</div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><div><div class="card-title">Phân Tích Chuỗi Thua</div><div class="card-subtitle">Xác suất gặp chuỗi thua liên tiếp</div></div></div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Chuỗi Thua</th><th>Xác Suất</th><th>Mất Vốn</th><th>Vốn Còn</th></tr></thead>
+                <tbody id="losingStreakTable"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div><div class="card-title">Bảo Vệ Vốn</div><div class="card-subtitle">Quy tắc quản lý rủi ro</div></div></div>
+            <div class="edu-tip" style="margin-bottom:0.8rem">
+              <span class="edu-icon">🛡️</span>
+              <div class="edu-text">
+                <strong>Quy tắc 3 lệnh:</strong> Nếu thua 3 lệnh liên tiếp — nghỉ ngơi ít nhất 4 giờ. Nếu thua 5 lệnh — nghỉ ngày hôm đó. Nếu drawdown > <span id="r-maxdd-rule">15%</span> trong tháng — dừng trading 1 tuần và review toàn bộ hệ thống.
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Quy Tắc</th><th>Giá Trị</th></tr></thead>
+                <tbody id="rulesTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== SCENARIO ==================== -->
+      <div class="page" id="page-scenario">
+        <div class="edu-tip">
+          <span class="edu-icon">🔮</span>
+          <div class="edu-text">
+            <strong>Scenario Simulator</strong> cho phép bạn thử nghiệm "What If" — điều gì xảy ra nếu win rate thay đổi? Nếu bạn tăng/giảm rủi ro? Kéo thanh trượt để thấy kết quả thay đổi theo thời gian thực. Đây là cách trader chuyên nghiệp stress-test kế hoạch.
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div><div class="card-title">Điều Chỉnh Kịch Bản</div><div class="card-subtitle">Kéo thanh trượt để thay đổi thông số</div></div></div>
+
+          <div class="form-group">
+            <label class="form-label">Win Rate: <strong id="s-wr-val">55%</strong></label>
+            <input type="range" id="s-winrate" min="20" max="85" value="55" oninput="updateScenario()">
+            <div class="slider-labels"><span>20%</span><span>50%</span><span>85%</span></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Risk : Reward: <strong id="s-rr-val">1:2.0</strong></label>
+            <input type="range" id="s-rr" min="5" max="50" value="20" oninput="updateScenario()">
+            <div class="slider-labels"><span>1:0.5</span><span>1:2.5</span><span>1:5.0</span></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Rủi Ro / Lệnh: <strong id="s-risk-val">1.0%</strong></label>
+            <input type="range" id="s-risk" min="2" max="50" value="10" oninput="updateScenario()">
+            <div class="slider-labels"><span>0.2%</span><span>2.5%</span><span>5.0%</span></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Số Lệnh / Tháng: <strong id="s-trades-val">20</strong></label>
+            <input type="range" id="s-trades" min="5" max="100" value="20" oninput="updateScenario()">
+            <div class="slider-labels"><span>5</span><span>50</span><span>100</span></div>
+          </div>
+        </div>
+
+        <div class="scenario-result" id="scenarioResult">
+          <div class="scenario-box best">
+            <div class="scenario-label">Tốt Nhất (90th)</div>
+            <div class="scenario-val" id="sc-best">—</div>
+            <div class="scenario-detail" id="sc-best-d">—</div>
+          </div>
+          <div class="scenario-box normal">
+            <div class="scenario-label">Trung Bình (50th)</div>
+            <div class="scenario-val" id="sc-med">—</div>
+            <div class="scenario-detail" id="sc-med-d">—</div>
+          </div>
+          <div class="scenario-box worst">
+            <div class="scenario-label">Xấu Nhất (10th)</div>
+            <div class="scenario-val" id="sc-worst">—</div>
+            <div class="scenario-detail" id="sc-worst-d">—</div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:1.25rem">
+          <div class="card-header"><div><div class="card-title">Mô Phỏng 12 Tháng</div><div class="card-subtitle">50 đường equity curve ngẫu nhiên</div></div></div>
+          <div class="chart-container" style="height:300px"><canvas id="chartScenario"></canvas></div>
+        </div>
+      </div>
+
+      <!-- ==================== PROJECTION ==================== -->
+      <div class="page" id="page-projection">
+        <div class="edu-tip">
+          <span class="edu-icon">📈</span>
+          <div class="edu-text">
+            <strong>Lãi kép là phép màu thứ 8 của thế giới.</strong> Nhưng trong trading, drawdown phá hủy lãi kép. Bảng dự phóng này tính toán lợi nhuận thực tế — có tính đến thua lỗ, drawdown, và rút tiền. Con số bạn thấy sẽ thấp hơn kỳ vọng — và đó mới là sự thật.
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div><div class="card-title">Dự Phóng Từng Tháng</div><div class="card-subtitle">Bao gồm lãi kép, rút tiền, và biến động</div></div></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr>
+                <th>Tháng</th><th>Vốn Đầu Tháng</th><th>Lệnh Thắng</th><th>Lệnh Thua</th>
+                <th>Lợi Nhuận</th><th>Rút Tiền</th><th>Vốn Cuối Tháng</th><th>Tổng ROI</th>
+              </tr></thead>
+              <tbody id="projectionTable"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div><div class="card-title">So Sánh Với Mục Tiêu</div></div></div>
+          <div class="chart-container"><canvas id="chartProjection"></canvas></div>
+        </div>
+      </div>
+
+      <!-- ==================== CHECKLIST ==================== -->
+      <div class="page" id="page-checklist">
+        <div class="edu-tip">
+          <span class="edu-icon">✅</span>
+          <div class="edu-text">
+            <strong>Trước khi bỏ tiền thật vào thị trường</strong>, hãy đảm bảo bạn đã hoàn thành tất cả mục trong checklist. Mỗi mục chưa hoàn thành là một lỗ hổng có thể khiến bạn mất tiền. Trader tỉnh thức chuẩn bị kỹ trước khi hành động.
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><div><div class="card-title">Nền Tảng (Bắt Buộc)</div></div><span class="card-badge badge-amber" id="cl-count1">0/8</span></div>
+            <ul class="checklist" id="checklist1"></ul>
+          </div>
+          <div class="card">
+            <div class="card-header"><div><div class="card-title">Nâng Cao (Khuyến Nghị)</div></div><span class="card-badge badge-blue" id="cl-count2">0/8</span></div>
+            <ul class="checklist" id="checklist2"></ul>
+          </div>
+        </div>
+        <div class="card" style="margin-top:1.25rem">
+          <div class="card-header"><div><div class="card-title">Tiến Độ Sẵn Sàng</div></div></div>
+          <div style="display:flex;align-items:center;gap:1rem">
+            <div class="progress-bar" style="flex:1"><div class="progress-fill" id="cl-progress" style="width:0%;background:var(--gold)"></div></div>
+            <span style="font-family:'Fraunces',serif;font-size:1.3rem;font-weight:700;color:var(--gold-l)" id="cl-pct">0%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== EDEN SCORE ==================== -->
+      <div class="page" id="page-score">
+        <div class="eden-score animate-in">
+          <div class="eden-score-value" id="eden-val">—</div>
+          <div class="eden-score-label">Eden Score / 100</div>
+          <div class="eden-score-desc" id="eden-desc">Hoàn thành Hồ Sơ Trader và Chiến Lược để nhận đánh giá tổng thể.</div>
+        </div>
+        <div class="grid-3" id="eden-breakdown">
+          <div class="stat green">
+            <div class="stat-label">Quản Trị Rủi Ro</div>
+            <div class="stat-value" id="es-risk">—</div>
+            <div class="stat-sub">/35 điểm</div>
+          </div>
+          <div class="stat blue">
+            <div class="stat-label">Chiến Lược</div>
+            <div class="stat-value" id="es-strat">—</div>
+            <div class="stat-sub">/35 điểm</div>
+          </div>
+          <div class="stat gold">
+            <div class="stat-label">Kỷ Luật & Chuẩn Bị</div>
+            <div class="stat-value" id="es-disc">—</div>
+            <div class="stat-sub">/30 điểm</div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:1.25rem">
+          <div class="card-header"><div><div class="card-title">Nhận Xét Từ Vườn Địa Đàng</div></div></div>
+          <div id="eden-feedback" style="display:flex;flex-direction:column;gap:0.8rem"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ==================== DATA & STATE ====================
+let charts={};
+const CL_ITEMS_1=[
+  'Có quỹ khẩn cấp ≥ 6 tháng chi phí',
+  'Vốn trading là tiền có thể mất 100%',
+  'Đã backtest hệ thống ≥ 100 lệnh',
+  'Có nhật ký giao dịch và đang sử dụng',
+  'Có quy tắc quản trị rủi ro rõ ràng (viết ra giấy)',
+  'Đã demo trading ≥ 3 tháng có lãi',
+  'Hiểu rõ phong cách trading phù hợp với mình',
+  'Có kế hoạch hành động khi drawdown lớn',
+];
+const CL_ITEMS_2=[
+  'Có mentor hoặc cộng đồng hỗ trợ',
+  'Hiểu về tâm lý trading và quản lý cảm xúc',
+  'Có routine giao dịch hàng ngày',
+  'Đã nghiên cứu > 3 chiến lược khác nhau',
+  'Có phương pháp đánh giá hiệu suất định kỳ',
+  'Hiểu về correlation giữa các cặp/sản phẩm',
+  'Có quy trình review lệnh hàng tuần',
+  'Đã đọc ≥ 5 cuốn sách về trading',
+];
+let checkState={};
+
+function V(id){return document.getElementById(id)}
+function val(id){return parseFloat(V(id)?.value)||0}
+function fmt(n,d=0){return n.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d})}
+function fmtUSD(n){return '$'+fmt(n)}
+
+// ==================== NAVIGATION ====================
+function switchPage(page,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  V('page-'+page).classList.add('active');
+  if(el)el.classList.add('active');
+  const titles={dashboard:'Dashboard Tổng Quan',profile:'Hồ Sơ Trader',strategy:'Chiến Lược & Mục Tiêu',risk:'Quản Trị Rủi Ro',scenario:'Chạy Thử Kịch Bản',projection:'Dự Phóng Lợi Nhuận',checklist:'Checklist Sẵn Sàng',score:'Eden Score'};
+  V('pageTitle').textContent=titles[page]||page;
+  if(page==='scenario')updateScenario();
+  if(page==='projection')updateProjection();
+  if(page==='score')updateEdenScore();
+  closeSidebar();
+}
+function toggleSidebar(){V('sidebar').classList.toggle('open')}
+function closeSidebar(){V('sidebar').classList.remove('open')}
+
+// ==================== CORE CALCULATIONS ====================
+function getParams(){
+  const capital=val('f-capital');
+  const wr=val('f-winrate')/100;
+  const rr=val('f-rr');
+  const riskPct=val('f-riskpct')/100;
+  const trades=val('f-trades');
+  const target=val('f-target')/100;
+  const maxDD=val('f-maxdd')/100;
+  const goal12=val('f-goal12');
+  const withdraw=val('f-withdraw')/100;
+  const riskPerTrade=capital*riskPct;
+  const expectancy=wr*rr-(1-wr);
+  const expectancyDollar=riskPerTrade*expectancy;
+  const monthlyReturn=expectancy*riskPct*trades;
+  const kelly=wr-(1-wr)/rr;
+  return{capital,wr,rr,riskPct,trades,target,maxDD,goal12,withdraw,riskPerTrade,expectancy,expectancyDollar,monthlyReturn,kelly};
+}
+
+function recalc(){
+  const p=getParams();
+  // Dashboard stats
+  V('d-capital').textContent=fmtUSD(p.capital);
+  V('d-expectancy').textContent=p.expectancyDollar>=0?'+'+fmtUSD(p.expectancyDollar):'-'+fmtUSD(Math.abs(p.expectancyDollar));
+  V('d-expectancy-sub').textContent=p.expectancy>=0?'Hệ thống có lợi thế':'⚠️ Hệ thống KHÔNG có lợi thế';
+  V('d-winrate').textContent=fmt(p.wr*100)+'%';
+  V('d-riskper').textContent=fmt(p.riskPct*100,1)+'%';
+  const riskColor=p.riskPct<=0.02?'green':p.riskPct<=0.03?'gold':'red';
+  V('d-risk-stat').className='stat '+riskColor;
+  V('d-riskper-sub').textContent=p.riskPct<=0.02?'✓ An toàn':p.riskPct<=0.03?'⚡ Cẩn thận':'⚠️ Quá cao!';
+
+  // Growth badge
+  const growth12=p.monthlyReturn>0?((1+p.monthlyReturn*(1-p.withdraw/100*100/(p.withdraw||1)))**12-1)*100:0;
+  V('d-growth-badge').textContent=p.monthlyReturn>0?'+'+fmt(p.monthlyReturn*100*12,1)+'%/yr':'—';
+
+  // Risk page
+  const ruin=calcRuin(p.wr,p.rr,p.riskPct);
+  V('r-ruin').textContent=fmt(ruin*100,2)+'%';
+  V('ruin-stat').className='stat '+(ruin<0.01?'green':ruin<0.05?'gold':'red');
+  V('r-kelly').textContent=fmt(Math.max(0,p.kelly*100),1)+'%';
+
+  // Losing streaks
+  updateLosingStreaks(p);
+  updateRules(p);
+  updateGrowthChart(p);
+  updateMonteChart(p);
+  updateStatsTable(p);
+}
+
+function calcRuin(wr,rr,riskPct){
+  if(wr<=0||rr<=0||riskPct<=0)return 0;
+  const edge=wr*rr-(1-wr);
+  if(edge<=0)return 1;
+  const units=1/riskPct;
+  const q=1-wr;
+  const ratio=q/(wr*Math.pow(rr,1));
+  if(ratio>=1)return 1;
+  return Math.min(1,Math.max(0,Math.pow(ratio,units)));
+}
+
+function updateLosingStreaks(p){
+  const tb=V('losingStreakTable');
+  let html='';
+  for(let n=3;n<=12;n+=1){
+    if(n>3&&n<5)continue;
+    if(n>5&&n<7)continue;
+    if(n>7&&n<10)continue;
+    const prob=Math.pow(1-p.wr,n);
+    const probInMonth=1-Math.pow(1-prob,Math.max(1,p.trades));
+    const loss=1-Math.pow(1-p.riskPct,n);
+    const remaining=p.capital*(1-loss);
+    const color=probInMonth>0.5?'var(--red)':probInMonth>0.1?'var(--amber)':'var(--green)';
+    html+=`<tr>
+      <td>${n} lệnh liên tiếp</td>
+      <td style="color:${color}">${fmt(probInMonth*100,1)}% / tháng</td>
+      <td style="color:var(--red)">-${fmt(loss*100,1)}%</td>
+      <td>${fmtUSD(remaining)}</td>
+    </tr>`;
+  }
+  tb.innerHTML=html;
+}
+
+function updateRules(p){
+  const tb=V('rulesTable');
+  const maxLossDay=Math.max(1,Math.round(p.riskPct*3*100));
+  const maxLossWeek=Math.max(2,Math.round(p.riskPct*7*100));
+  V('r-maxdd-rule').textContent=fmt(val('f-maxdd'))+'%';
+  tb.innerHTML=`
+    <tr><td>Rủi ro tối đa / lệnh</td><td style="color:var(--gold-l)">${fmt(p.riskPct*100,1)}% = ${fmtUSD(p.riskPerTrade)}</td></tr>
+    <tr><td>Thua tối đa / ngày</td><td style="color:var(--amber)">${maxLossDay}% vốn → dừng ngày</td></tr>
+    <tr><td>Thua tối đa / tuần</td><td style="color:var(--amber)">${maxLossWeek}% vốn → review</td></tr>
+    <tr><td>Drawdown → dừng trading</td><td style="color:var(--red)">${fmt(val('f-maxdd'))}% → nghỉ 1 tuần</td></tr>
+    <tr><td>Kelly Criterion gợi ý</td><td style="color:var(--green)">${fmt(Math.max(0,p.kelly*100),1)}% / lệnh</td></tr>
+    <tr><td>Position size tối đa</td><td>${fmtUSD(p.riskPerTrade)} risk / lệnh</td></tr>
+  `;
+}
+
+function updateStatsTable(p){
+  const tb=V('statsTable');
+  const edge=p.expectancy;
+  const profitFactor=p.wr*p.rr/((1-p.wr)||0.01);
+  const payoff=p.rr;
+  const breakeven=1/(1+p.rr);
+  const monthlyRet=p.monthlyReturn*100;
+  const items=[
+    ['Expectancy (R)',edge>=0?'+'+fmt(edge,3):fmt(edge,3),edge>0?'badge-green':'badge-red',edge>0?'Có lợi thế':'Không có lợi thế'],
+    ['Profit Factor',fmt(profitFactor,2),profitFactor>1.5?'badge-green':profitFactor>1?'badge-amber':'badge-red',profitFactor>1.5?'Tốt':profitFactor>1?'Trung bình':'Cần cải thiện'],
+    ['Payoff Ratio','1:'+fmt(payoff,1),payoff>=2?'badge-green':payoff>=1.5?'badge-amber':'badge-red','Risk:Reward'],
+    ['Breakeven Win Rate',fmt(breakeven*100,1)+'%',p.wr>breakeven?'badge-green':'badge-red',p.wr>breakeven?'WR > BE ✓':'WR < BE ✗'],
+    ['Lợi nhuận kỳ vọng / tháng',fmt(monthlyRet,2)+'%',monthlyRet>0?'badge-green':'badge-red',fmtUSD(p.capital*p.monthlyReturn)],
+    ['Kelly Criterion',fmt(Math.max(0,p.kelly*100),1)+'%',p.riskPct<=p.kelly?'badge-green':'badge-red','% vốn tối ưu / lệnh'],
+    ['Risk of Ruin',fmt(calcRuin(p.wr,p.rr,p.riskPct)*100,2)+'%',calcRuin(p.wr,p.rr,p.riskPct)<0.01?'badge-green':calcRuin(p.wr,p.rr,p.riskPct)<0.05?'badge-amber':'badge-red','Xác suất phá sản'],
+  ];
+  tb.innerHTML=items.map(i=>`<tr><td style="font-weight:600;color:var(--text)">${i[0]}</td><td style="font-family:'Fraunces',serif;font-weight:700">${i[1]}</td><td><span class="card-badge ${i[2]}">${i[3]}</span></td><td>${i[3]}</td></tr>`).join('');
+}
+
+// ==================== CHARTS ====================
+const chartDefaults={
+  responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:false}},
+  scales:{
+    x:{grid:{color:'rgba(42,50,59,0.5)'},ticks:{color:'#6B7280',font:{size:11}}},
+    y:{grid:{color:'rgba(42,50,59,0.5)'},ticks:{color:'#6B7280',font:{size:11}}}
+  }
+};
+
+function updateGrowthChart(p){
+  const ctx=V('chartGrowth');
+  if(charts.growth)charts.growth.destroy();
+  const labels=Array.from({length:13},(_,i)=>'T'+i);
+  const data=[p.capital];
+  let bal=p.capital;
+  for(let m=1;m<=12;m++){
+    const profit=bal*p.monthlyReturn;
+    const wd=Math.max(0,profit)*val('f-withdraw')/100;
+    bal=bal+profit-wd;
+    data.push(Math.max(0,bal));
+  }
+  charts.growth=new Chart(ctx,{
+    type:'line',
+    data:{labels,datasets:[{data,borderColor:'#C9A84C',backgroundColor:'rgba(201,168,76,0.1)',fill:true,tension:0.4,pointRadius:3,pointBackgroundColor:'#C9A84C',borderWidth:2}]},
+    options:{...chartDefaults,scales:{...chartDefaults.scales,y:{...chartDefaults.scales.y,ticks:{...chartDefaults.scales.y.ticks,callback:v=>'$'+fmt(v)}}}}
+  });
+}
+
+function runMonteCarlo(p,runs=500,months=12){
+  const results=[];
+  for(let r=0;r<runs;r++){
+    let bal=p.capital;
+    const curve=[bal];
+    for(let m=0;m<months;m++){
+      for(let t=0;t<p.trades;t++){
+        const win=Math.random()<p.wr;
+        if(win)bal+=bal*p.riskPct*p.rr;
+        else bal-=bal*p.riskPct;
+        if(bal<=0){bal=0;break}
+      }
+      const wd=Math.max(0,bal-curve[curve.length-1])*val('f-withdraw')/100;
+      bal-=wd;
+      curve.push(Math.max(0,bal));
+      if(bal<=0)for(let x=curve.length;x<=months;x++)curve.push(0);
+      if(bal<=0)break;
+    }
+    results.push(curve);
+  }
+  return results;
+}
+
+function updateMonteChart(p){
+  const ctx=V('chartMonte');
+  if(charts.monte)charts.monte.destroy();
+  if(!p.capital||!p.wr||!p.rr||!p.riskPct||!p.trades){
+    charts.monte=new Chart(ctx,{type:'bar',data:{labels:[''],datasets:[{data:[0]}]},options:chartDefaults});
+    return;
+  }
+  const mc=runMonteCarlo(p,500,12);
+  const finals=mc.map(c=>c[c.length-1]).sort((a,b)=>a-b);
+  const bins=20;
+  const min=Math.min(...finals),max=Math.max(...finals);
+  const step=(max-min)/bins||1;
+  const labels=[],data=[];
+  for(let i=0;i<bins;i++){
+    const lo=min+i*step,hi=lo+step;
+    labels.push('$'+fmt(lo));
+    data.push(finals.filter(v=>v>=lo&&v<hi).length);
+  }
+  const colors=data.map((_,i)=>{
+    const mid=bins/2;
+    return i<mid*0.4?'rgba(248,113,113,0.6)':i<mid?'rgba(251,191,36,0.6)':'rgba(52,211,153,0.6)';
+  });
+  charts.monte=new Chart(ctx,{
+    type:'bar',
+    data:{labels,datasets:[{data,backgroundColor:colors,borderRadius:4}]},
+    options:{...chartDefaults,scales:{...chartDefaults.scales,x:{...chartDefaults.scales.x,ticks:{...chartDefaults.scales.x.ticks,maxTicksLimit:6}}}}
+  });
+  // Max DD from Monte Carlo
+  let worstDD=0;
+  mc.forEach(curve=>{
+    let peak=curve[0];
+    curve.forEach(v=>{
+      if(v>peak)peak=v;
+      const dd=(peak-v)/peak;
+      if(dd>worstDD)worstDD=dd;
+    });
+  });
+  V('r-maxdd').textContent=fmt(worstDD*100,1)+'%';
+}
+
+// ==================== SCENARIO SIMULATOR ====================
+function updateScenario(){
+  const capital=val('f-capital')||10000;
+  const wr=parseInt(V('s-winrate').value)/100;
+  const rr=parseInt(V('s-rr').value)/10;
+  const riskPct=parseInt(V('s-risk').value)/1000;
+  const trades=parseInt(V('s-trades').value);
+
+  V('s-wr-val').textContent=fmt(wr*100)+'%';
+  V('s-rr-val').textContent='1:'+fmt(rr,1);
+  V('s-risk-val').textContent=fmt(riskPct*100,1)+'%';
+  V('s-trades-val').textContent=trades;
+
+  const sp={capital,wr,rr,riskPct,trades,monthlyReturn:0,withdraw:0};
+  sp.monthlyReturn=(wr*rr-(1-wr))*riskPct*trades;
+
+  const mc=runMonteCarlo(sp,1000,12);
+  const finals=mc.map(c=>c[c.length-1]).sort((a,b)=>a-b);
+  const p10=finals[Math.floor(finals.length*0.1)];
+  const p50=finals[Math.floor(finals.length*0.5)];
+  const p90=finals[Math.floor(finals.length*0.9)];
+
+  V('sc-best').textContent=fmtUSD(p90);
+  V('sc-best-d').textContent='+'+ fmt((p90/capital-1)*100,1)+'% ROI';
+  V('sc-med').textContent=fmtUSD(p50);
+  V('sc-med-d').textContent=(p50>=capital?'+':'')+fmt((p50/capital-1)*100,1)+'% ROI';
+  V('sc-worst').textContent=fmtUSD(p10);
+  V('sc-worst-d').textContent=fmt((p10/capital-1)*100,1)+'% ROI';
+
+  // Draw scenario chart
+  const ctx=V('chartScenario');
+  if(charts.scenario)charts.scenario.destroy();
+  const labels=Array.from({length:13},(_,i)=>'T'+i);
+  const sample=mc.slice(0,50);
+  const datasets=sample.map((curve,idx)=>({
+    data:curve.slice(0,13),
+    borderColor:curve[12]>=capital?'rgba(52,211,153,0.2)':'rgba(248,113,113,0.2)',
+    borderWidth:1,pointRadius:0,tension:0.3,fill:false
+  }));
+  // Add median line
+  const medianCurve=[];
+  for(let m=0;m<=12;m++){
+    const vals=mc.map(c=>c[m]||0).sort((a,b)=>a-b);
+    medianCurve.push(vals[Math.floor(vals.length/2)]);
+  }
+  datasets.push({data:medianCurve,borderColor:'#60A5FA',borderWidth:2.5,pointRadius:0,tension:0.3,fill:false});
+
+  charts.scenario=new Chart(ctx,{
+    type:'line',
+    data:{labels,datasets},
+    options:{...chartDefaults,plugins:{legend:{display:false}},scales:{...chartDefaults.scales,y:{...chartDefaults.scales.y,ticks:{...chartDefaults.scales.y.ticks,callback:v=>'$'+fmt(v)}}}}
+  });
+
+  // Sync sliders to main form if scenario page active
+  V('s-winrate').value=V('s-winrate').value;
+}
+
+// ==================== PROJECTION ====================
+function updateProjection(){
+  const p=getParams();
+  const tb=V('projectionTable');
+  let bal=p.capital;
+  let html='';
+  const actual=[p.capital],target=[p.capital];
+  const goal12=val('f-goal12')||p.capital*1.5;
+  const targetGrowth=Math.pow(goal12/p.capital,1/12)-1;
+
+  for(let m=1;m<=12;m++){
+    const startBal=bal;
+    const wins=Math.round(p.trades*p.wr);
+    const losses=p.trades-wins;
+    const profit=startBal*p.monthlyReturn;
+    const wd=Math.max(0,profit)*val('f-withdraw')/100;
+    bal=bal+profit-wd;
+    const roi=(bal/p.capital-1)*100;
+    const rowColor=profit>=0?'':'style="color:var(--red)"';
+    html+=`<tr>
+      <td style="font-weight:600">Tháng ${m}</td>
+      <td>${fmtUSD(startBal)}</td>
+      <td style="color:var(--green)">${wins}</td>
+      <td style="color:var(--red)">${losses}</td>
+      <td ${rowColor}>${profit>=0?'+':''}${fmtUSD(profit)}</td>
+      <td style="color:var(--amber)">${wd>0?'-'+fmtUSD(wd):'—'}</td>
+      <td style="font-weight:600">${fmtUSD(bal)}</td>
+      <td style="color:${roi>=0?'var(--green)':'var(--red)'}">${roi>=0?'+':''}${fmt(roi,1)}%</td>
+    </tr>`;
+    actual.push(bal);
+    target.push(p.capital*Math.pow(1+targetGrowth,m));
+  }
+  tb.innerHTML=html;
+
+  const ctx=V('chartProjection');
+  if(charts.projection)charts.projection.destroy();
+  const labels=Array.from({length:13},(_,i)=>'T'+i);
+  charts.projection=new Chart(ctx,{
+    type:'line',
+    data:{labels,datasets:[
+      {label:'Dự phóng',data:actual,borderColor:'#C9A84C',backgroundColor:'rgba(201,168,76,0.1)',fill:true,tension:0.4,borderWidth:2,pointRadius:3,pointBackgroundColor:'#C9A84C'},
+      {label:'Mục tiêu',data:target,borderColor:'#60A5FA',borderDash:[6,4],borderWidth:1.5,pointRadius:0,tension:0.4,fill:false}
+    ]},
+    options:{...chartDefaults,plugins:{legend:{display:true,labels:{color:'#9CA3AF',font:{size:11}}}},scales:{...chartDefaults.scales,y:{...chartDefaults.scales.y,ticks:{...chartDefaults.scales.y.ticks,callback:v=>'$'+fmt(v)}}}}
+  });
+}
+
+// ==================== CHECKLIST ====================
+function initChecklist(){
+  [['checklist1',CL_ITEMS_1],['checklist2',CL_ITEMS_2]].forEach(([id,items])=>{
+    const ul=V(id);
+    ul.innerHTML=items.map((t,i)=>`<li data-key="${id}-${i}" onclick="toggleCheck(this)"><span class="check-box">✓</span>${t}</li>`).join('');
+  });
+}
+function toggleCheck(li){
+  li.classList.toggle('checked');
+  const key=li.dataset.key;
+  checkState[key]=li.classList.contains('checked');
+  updateCheckProgress();
+}
+function updateCheckProgress(){
+  const total=CL_ITEMS_1.length+CL_ITEMS_2.length;
+  const done=Object.values(checkState).filter(Boolean).length;
+  const done1=Object.entries(checkState).filter(([k,v])=>k.startsWith('checklist1')&&v).length;
+  const done2=Object.entries(checkState).filter(([k,v])=>k.startsWith('checklist2')&&v).length;
+  V('cl-count1').textContent=`${done1}/${CL_ITEMS_1.length}`;
+  V('cl-count2').textContent=`${done2}/${CL_ITEMS_2.length}`;
+  const pct=Math.round(done/total*100);
+  V('cl-progress').style.width=pct+'%';
+  V('cl-pct').textContent=pct+'%';
+}
+
+// ==================== EDEN SCORE ====================
+function updateEdenScore(){
+  const p=getParams();
+  let riskScore=0,stratScore=0,discScore=0;
+
+  // Risk (35 pts)
+  if(p.riskPct>0&&p.riskPct<=0.02)riskScore+=12;
+  else if(p.riskPct<=0.03)riskScore+=7;
+  else if(p.riskPct>0)riskScore+=2;
+  const ruin=calcRuin(p.wr,p.rr,p.riskPct);
+  if(ruin<0.01)riskScore+=12;else if(ruin<0.05)riskScore+=7;else if(ruin<0.2)riskScore+=3;
+  if(val('f-maxdd')>0&&val('f-maxdd')<=20)riskScore+=6;else if(val('f-maxdd')<=30)riskScore+=3;
+  if(val('f-emergency')>=6)riskScore+=5;else if(val('f-emergency')>=3)riskScore+=2;
+
+  // Strategy (35 pts)
+  if(p.expectancy>0.3)stratScore+=12;else if(p.expectancy>0.1)stratScore+=8;else if(p.expectancy>0)stratScore+=4;
+  const pf=p.wr*p.rr/((1-p.wr)||0.01);
+  if(pf>2)stratScore+=10;else if(pf>1.5)stratScore+=7;else if(pf>1)stratScore+=3;
+  if(p.trades>=10&&p.trades<=40)stratScore+=8;else if(p.trades>0)stratScore+=4;
+  if(p.rr>=2)stratScore+=5;else if(p.rr>=1.5)stratScore+=3;else if(p.rr>0)stratScore+=1;
+
+  // Discipline (30 pts)
+  const clDone=Object.values(checkState).filter(Boolean).length;
+  const clTotal=CL_ITEMS_1.length+CL_ITEMS_2.length;
+  discScore+=Math.round(clDone/clTotal*20);
+  if(val('f-capital')>0)discScore+=3;
+  if(val('f-winrate')>0&&val('f-rr')>0)discScore+=4;
+  if(val('f-target')>0)discScore+=3;
+
+  const total=riskScore+stratScore+discScore;
+  V('es-risk').textContent=riskScore;
+  V('es-strat').textContent=stratScore;
+  V('es-disc').textContent=discScore;
+  V('eden-val').textContent=total;
+
+  let desc='',feedbacks=[];
+  if(total>=80){
+    desc='Xuất sắc! Bạn có một kế hoạch trading vững chắc. Hãy duy trì kỷ luật và tiếp tục cải thiện.';
+    feedbacks=[
+      {icon:'🌟',text:'Kế hoạch quản trị rủi ro tuyệt vời. Bạn hiểu rằng bảo vệ vốn là ưu tiên số 1.',c:'var(--green)'},
+      {icon:'📈',text:'Hệ thống trading có lợi thế rõ ràng. Expectancy dương và profit factor tốt.',c:'var(--green)'},
+      {icon:'💎',text:'Mức kỷ luật cao. Tiếp tục duy trì routine và review thường xuyên.',c:'var(--green)'},
+    ];
+  }else if(total>=60){
+    desc='Khá tốt! Kế hoạch có nền tảng nhưng vẫn cần cải thiện một số điểm quan trọng.';
+    feedbacks=[
+      {icon:'⚡',text:riskScore<20?'Cần cải thiện quản trị rủi ro. Xem lại mức rủi ro/lệnh và đảm bảo có quỹ khẩn cấp đầy đủ.':'Quản trị rủi ro ở mức chấp nhận được.',c:riskScore<20?'var(--amber)':'var(--green)'},
+      {icon:'🎯',text:stratScore<20?'Hệ thống cần backtest thêm. Win rate và R:R cần tối ưu để có expectancy cao hơn.':'Chiến lược có tiềm năng.',c:stratScore<20?'var(--amber)':'var(--green)'},
+      {icon:'📋',text:discScore<15?'Hoàn thành checklist sẵn sàng để nâng cao điểm kỷ luật.':'Chuẩn bị khá tốt.',c:discScore<15?'var(--amber)':'var(--green)'},
+    ];
+  }else if(total>=30){
+    desc='Cần cải thiện nhiều. Hãy dành thời gian hoàn thiện kế hoạch trước khi trade tiền thật.';
+    feedbacks=[
+      {icon:'⚠️',text:'Kế hoạch quản trị rủi ro chưa đầy đủ. Đây là ưu tiên số 1 cần giải quyết.',c:'var(--red)'},
+      {icon:'📊',text:'Cần backtest và ghi nhật ký ít nhất 100 lệnh trước khi đánh giá hệ thống.',c:'var(--amber)'},
+      {icon:'📖',text:'Hoàn thành các bài học trong "12 Cuộn Da Dê" trước khi tiếp tục.',c:'var(--amber)'},
+    ];
+  }else{
+    desc='Hãy bắt đầu bằng cách điền đầy đủ thông tin trong Hồ Sơ Trader và Chiến Lược.';
+    feedbacks=[{icon:'🌱',text:'Chào mừng! Hãy điền thông tin trong các tab để nhận đánh giá chi tiết.',c:'var(--blue)'}];
+  }
+  V('eden-desc').textContent=desc;
+  V('eden-feedback').innerHTML=feedbacks.map(f=>`<div class="edu-tip" style="border-color:${f.c}30;background:${f.c}08"><span class="edu-icon">${f.icon}</span><div class="edu-text" style="color:${f.c}">${f.text}</div></div>`).join('');
+}
+
+// ==================== UTILS ====================
+function resetAll(){
+  if(!confirm('Xóa tất cả dữ liệu đã nhập?'))return;
+  document.querySelectorAll('.form-input,.form-select').forEach(el=>{
+    if(el.tagName==='SELECT')el.selectedIndex=0;
+    else el.value='';
+  });
+  checkState={};
+  initChecklist();
+  updateCheckProgress();
+  recalc();
+}
+function exportPlan(){alert('Tính năng xuất PDF sẽ được tích hợp trong phiên bản tiếp theo. Hiện tại bạn có thể chụp màn hình hoặc Ctrl+P để in.')}
+
+// ==================== INIT ====================
+initChecklist();
+updateCheckProgress();
+recalc();
+
+// Sync scenario sliders with main form
+const syncFields=[['f-winrate','s-winrate',1],['f-rr','s-rr',10],['f-riskpct','s-risk',10],['f-trades','s-trades',1]];
+const observer=new MutationObserver(()=>{});
+setInterval(()=>{
+  syncFields.forEach(([src,dst,mul])=>{
+    const v=val(src);
+    if(v>0)V(dst).value=v*mul;
+  });
+},1000);
+</script>
+</body>
+</html>
