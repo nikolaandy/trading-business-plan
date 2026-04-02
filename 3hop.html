@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phương Pháp 3 Hộp — ROVA</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--gold:#d4af37;--gold2:#f0d060;--bg:#0a0e17;--bg2:#111827;--green:#22c55e;--red:#ef4444;--blue:#3b82f6}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:#fff;overflow-x:hidden}
+
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:50%;left:50%;width:800px;height:800px;background:radial-gradient(circle,rgba(212,175,55,0.06) 0%,transparent 70%);transform:translate(-50%,-50%);border-radius:50%}
+.hero-tag{font-size:14px;color:var(--gold);letter-spacing:6px;text-transform:uppercase;margin-bottom:20px;opacity:0;animation:fadeUp .8s .2s forwards}
+.hero h1{font-size:clamp(36px,6vw,80px);font-weight:900;line-height:1.1;margin-bottom:24px;opacity:0;animation:fadeUp .8s .4s forwards}
+.hero h1 span{background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:20px;color:#888;max-width:600px;opacity:0;animation:fadeUp .8s .6s forwards}
+.scroll-hint{position:absolute;bottom:40px;opacity:0;animation:fadeUp .8s 1s forwards,bounce 2s 1.5s infinite}
+.scroll-hint span{display:block;width:2px;height:40px;background:linear-gradient(to bottom,var(--gold),transparent);margin:0 auto}
+
+/* 3 BOXES VISUAL */
+.boxes-section{padding:80px 20px;max-width:1200px;margin:0 auto}
+.section-title{text-align:center;font-size:clamp(28px,4vw,48px);font-weight:800;margin-bottom:60px}
+.section-title span{color:var(--gold)}
+
+.chart-container{position:relative;background:var(--bg2);border-radius:24px;padding:40px;border:1px solid rgba(255,255,255,0.06);overflow:hidden;margin-bottom:80px}
+.chart-container::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+
+.chart-visual{position:relative;height:500px;display:flex;align-items:flex-end;gap:0;padding:20px 0}
+
+/* Candles */
+.candle-group{display:flex;align-items:flex-end;gap:4px;flex:1;justify-content:center;position:relative;z-index:2}
+.candle{width:12px;position:relative;display:flex;flex-direction:column;align-items:center}
+.candle-wick{width:2px;background:#555}
+.candle-body{width:12px;border-radius:2px;min-height:8px}
+.candle.green .candle-body{background:var(--green)}
+.candle.red .candle-body{background:var(--red)}
+.candle.master .candle-body{background:var(--gold);box-shadow:0 0 20px rgba(212,175,55,0.4)}
+.candle.master{z-index:5}
+
+/* Boxes overlay */
+.box-overlay{position:absolute;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-direction:column;transition:all .5s;opacity:0;animation:boxReveal 1s forwards}
+.box-overlay.box1{background:rgba(239,68,68,0.08);border:2px solid rgba(239,68,68,0.4);bottom:20px;left:5%;width:28%;height:35%;animation-delay:0.5s}
+.box-overlay.box2{background:rgba(59,130,246,0.08);border:2px solid rgba(59,130,246,0.4);bottom:25%;left:36%;width:28%;height:40%;animation-delay:1s}
+.box-overlay.box3{background:rgba(34,197,94,0.08);border:2px solid rgba(34,197,94,0.4);bottom:20%;right:5%;width:28%;height:55%;animation-delay:1.5s}
+
+.box-label{font-size:14px;font-weight:800;letter-spacing:3px;text-transform:uppercase;margin-bottom:8px}
+.box1 .box-label{color:var(--red)}
+.box2 .box-label{color:var(--blue)}
+.box3 .box-label{color:var(--green)}
+.box-name{font-size:28px;font-weight:900;margin-bottom:4px}
+.box1 .box-name{color:var(--red)}
+.box2 .box-name{color:var(--blue)}
+.box3 .box-name{color:var(--green)}
+.box-desc{font-size:13px;color:#888;text-align:center;max-width:200px}
+
+/* Master candle line */
+.master-line{position:absolute;left:12%;top:0;bottom:0;width:2px;background:repeating-linear-gradient(to bottom,var(--gold) 0,var(--gold) 8px,transparent 8px,transparent 16px);opacity:0.4;z-index:1}
+.master-label{position:absolute;left:8%;top:12px;background:var(--gold);color:#000;font-size:12px;font-weight:800;padding:6px 14px;border-radius:6px;letter-spacing:1px;z-index:3}
+
+/* Price labels */
+.price-axis{position:absolute;right:0;top:0;bottom:0;width:80px;display:flex;flex-direction:column;justify-content:space-between;padding:20px 0}
+.price-tick{font-size:12px;color:#555;text-align:right;padding-right:10px}
+
+/* Cards */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin-top:60px}
+.card{background:var(--bg2);border-radius:20px;padding:36px;border:1px solid rgba(255,255,255,0.06);position:relative;overflow:hidden;transition:transform .3s,border-color .3s}
+.card:hover{transform:translateY(-4px)}
+.card:nth-child(1):hover{border-color:rgba(239,68,68,0.4)}
+.card:nth-child(2):hover{border-color:rgba(59,130,246,0.4)}
+.card:nth-child(3):hover{border-color:rgba(34,197,94,0.4)}
+.card-num{font-size:80px;font-weight:900;position:absolute;top:-10px;right:16px;opacity:0.05}
+.card-icon{font-size:36px;margin-bottom:16px}
+.card h3{font-size:24px;font-weight:800;margin-bottom:12px}
+.card:nth-child(1) h3{color:var(--red)}
+.card:nth-child(2) h3{color:var(--blue)}
+.card:nth-child(3) h3{color:var(--green)}
+.card p{font-size:15px;color:#888;line-height:1.7;margin-bottom:12px}
+.card .quote{font-size:13px;color:#666;font-style:italic;border-top:1px solid rgba(255,255,255,0.06);padding-top:12px;margin-top:12px}
+.card .quote strong{color:var(--gold)}
+
+/* Formula */
+.formula-section{text-align:center;padding:60px 20px;margin:40px 0}
+.formula-row{display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;margin:30px 0}
+.f-box{background:rgba(212,175,55,0.08);border:2px solid var(--gold);border-radius:16px;padding:20px 36px;text-align:center}
+.f-box .f-label{font-size:12px;color:#888;letter-spacing:2px;text-transform:uppercase}
+.f-box .f-value{font-size:24px;font-weight:900;color:var(--gold);margin-top:4px}
+.f-op{font-size:32px;font-weight:900;color:var(--gold)}
+.f-result{background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;color:#000}
+.f-result .f-label{color:#000;opacity:0.6}
+.f-result .f-value{color:#000}
+
+/* Bottom quote */
+.bottom-quote{text-align:center;padding:80px 20px;max-width:800px;margin:0 auto}
+.bottom-quote blockquote{font-size:24px;font-style:italic;color:#aaa;line-height:1.6;margin-bottom:20px}
+.bottom-quote blockquote span{color:var(--gold);font-weight:700}
+.bottom-quote .logo{font-size:32px;font-weight:900;color:var(--gold);letter-spacing:6px;margin-top:40px}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes boxReveal{from{opacity:0;transform:scale(0.8)}to{opacity:1;transform:scale(1)}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(10px)}}
+
+@media(max-width:768px){
+  .cards{grid-template-columns:1fr}
+  .chart-visual{height:350px}
+  .formula-row{flex-direction:column}
+  .box-name{font-size:20px}
+  .box-overlay{border-radius:8px}
+}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-tag">ROVA Trading Academy</div>
+  <h1>Phương Pháp<br><span>3 Hộp</span></h1>
+  <p>Phản ánh chính xác bản chất thị trường. Biến trading thành cỗ máy in tiền có hệ thống.</p>
+  <div class="scroll-hint">
+    <span></span>
+  </div>
+</section>
+
+<section class="boxes-section">
+  <h2 class="section-title">Giải mã <span>3 Hộp</span> trên đồ thị</h2>
+  
+  <div class="chart-container">
+    <div class="master-label">NẾN CHỦ</div>
+    <div class="master-line"></div>
+    
+    <div class="chart-visual">
+      <!-- Box overlays -->
+      <div class="box-overlay box1">
+        <div class="box-label">Hộp 1</div>
+        <div class="box-name">🛡️ SL</div>
+        <div class="box-desc">Xác định Stop Loss chuẩn xác</div>
+      </div>
+      <div class="box-overlay box2">
+        <div class="box-label">Hộp 2</div>
+        <div class="box-name">🎯 Entry</div>
+        <div class="box-desc">Điểm vào lệnh hoàn hảo</div>
+      </div>
+      <div class="box-overlay box3">
+        <div class="box-label">Hộp 3</div>
+        <div class="box-name">💰 TP</div>
+        <div class="box-desc">Chốt lời chính xác</div>
+      </div>
+      
+      <!-- Candles - simulated price action -->
+      <div class="candle-group" style="padding-bottom:120px">
+        <div class="candle master"><div class="candle-wick" style="height:30px"></div><div class="candle-body" style="height:60px"></div><div class="candle-wick" style="height:20px"></div></div>
+        <div class="candle red"><div class="candle-wick" style="height:15px"></div><div class="candle-body" style="height:40px"></div><div class="candle-wick" style="height:25px"></div></div>
+        <div class="candle red"><div class="candle-wick" style="height:10px"></div><div class="candle-body" style="height:50px"></div><div class="candle-wick" style="height:15px"></div></div>
+        <div class="candle green"><div class="candle-wick" style="height:20px"></div><div class="candle-body" style="height:30px"></div><div class="candle-wick" style="height:10px"></div></div>
+        <div class="candle red"><div class="candle-wick" style="height:12px"></div><div class="candle-body" style="height:55px"></div><div class="candle-wick" style="height:30px"></div></div>
+      </div>
+      <div class="candle-group" style="padding-bottom:100px">
+        <div class="candle green"><div class="candle-wick" style="height:25px"></div><div class="candle-body" style="height:35px"></div><div class="candle-wick" style="height:10px"></div></div>
+        <div class="candle green"><div class="candle-wick" style="height:10px"></div><div class="candle-body" style="height:45px"></div><div class="candle-wick" style="height:8px"></div></div>
+        <div class="candle red"><div class="candle-wick" style="height:15px"></div><div class="candle-body" style="height:20px"></div><div class="candle-wick" style="height:12px"></div></div>
+        <div class="candle green"><div class="candle-wick" style="height:8px"></div><div class="candle-body" style="height:50px"></div><div class="candle-wick" style="height:5px"></div></div>
+        <div class="candle green"><div class="candle-wick" style="height:5px"></div><div class="candle-body" style="height:40px"></div><div class="candle-wick" style="height:15px"></div></div>
+      </div>
+      <div class="candle-group" style="padding-bottom:160px">
+        <div class="candle green"><div class="candle-wick" style="height:8px"></div><div class="candle-body" style="height:55px"></div><div class="candle-wick" style="height:5px"></div></div>
+        <div class="candle green"><div class="candle-wick" style="height:5px"></div><div class="candle-body" style="height:70px"></div><div class="candle-wick" style="height:3px"></div></div>
+        <div class="candle red"><div class="candle-wick" style="height:20px"></div><div class="candle-body" style="height:25px"></div><div class="candle-wick" style="height:10px"></div></div>
+        <div class="candle green"><div class="candle-wick" style="height:3px"></div><div class="candle-body" style="height:80px"></div><div class="candle-wick" style="height:5px"></div></div>
+        <div class="candle green"><div class="candle-wick" style="height:10px"></div><div class="candle-body" style="height:60px"></div><div class="candle-wick" style="height:8px"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 Cards -->
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">1</div>
+      <div class="card-icon">🛡️</div>
+      <h3>Hộp 1: Stop Loss</h3>
+      <p>Xác định vùng SL chuẩn xác. Biết CHÍNH XÁC mất bao nhiêu nếu sai. Không bao giờ để 1 lệnh giết chết tài khoản.</p>
+      <p>Bảo vệ vốn = bảo vệ cơ hội.</p>
+      <div class="quote">"Nguyên tắc 1: không để mất tiền. Nguyên tắc 2: không quên nguyên tắc 1." — <strong>Warren Buffett</strong></div>
+    </div>
+    <div class="card">
+      <div class="card-num">2</div>
+      <div class="card-icon">🎯</div>
+      <h3>Hộp 2: Entry</h3>
+      <p>Điểm vào lệnh hoàn hảo dựa trên mô hình lặp lại. Không đoán, không cảm tính. Mô hình xuất hiện → vào lệnh.</p>
+      <p>Tỷ lệ vàng 66.67% khi đúng hướng Nến Chủ.</p>
+      <div class="quote">"Mô hình lặp lại bởi vì bản chất con người không thay đổi sau hàng ngàn năm." — <strong>Jesse Livermore</strong></div>
+    </div>
+    <div class="card">
+      <div class="card-num">3</div>
+      <div class="card-icon">💰</div>
+      <h3>Hộp 3: Take Profit</h3>
+      <p>Chốt lời chính xác. Không chốt sớm vì sợ, không tham lam giữ quá lâu. Biết chính xác R:R trước khi vào lệnh.</p>
+      <p>Lãi lớn khi đúng, lỗ nhỏ khi sai.</p>
+      <div class="quote">"Bạn đúng hay sai không quan trọng. Cái chính là kiếm bao nhiêu khi đúng, mất bao nhiêu khi sai." — <strong>George Soros</strong></div>
+    </div>
+  </div>
+</section>
+
+<section class="formula-section">
+  <h2 class="section-title">Công thức <span>Cỗ Máy</span></h2>
+  <div class="formula-row">
+    <div class="f-box"><div class="f-label">Nền tảng</div><div class="f-value">VỐN</div></div>
+    <div class="f-op">+</div>
+    <div class="f-box"><div class="f-label">Trái tim</div><div class="f-value">3 HỘP</div></div>
+    <div class="f-op">+</div>
+    <div class="f-box"><div class="f-label">Nhiên liệu</div><div class="f-value">KỶ LUẬT</div></div>
+    <div class="f-op">=</div>
+    <div class="f-box f-result"><div class="f-label">Kết quả</div><div class="f-value">TỰ DO</div></div>
+  </div>
+</section>
+
+<section class="bottom-quote">
+  <blockquote>"Trading không dành cho người muốn thắng nhanh.<br>Trading dành cho người muốn <span>sống lâu</span> —<br>và ăn rất lớn khi thời điểm đến."</blockquote>
+  <div class="logo">ROVA</div>
+</section>
+
+</body>
+</html>
